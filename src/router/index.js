@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 const Login = () => import('../components/login/Login');
 const Home = () => import('../components/Home');
 const ManageBlog = () => import('../components/manage/ManageBlog');
+const ManageList = () => import('../components/manage/manageList/ManageList');
+const EditBlog = () => import('../components/manage/editBlog/EditBlog');
 const PrivateManage = () => import('../components/personal/PrivateManage');
 const WriteBlog = () => import('../components/write/WriteBlog');
 
@@ -33,7 +35,21 @@ const routes = [
       },
       {
         path: 'manage-blog',
-        component: ManageBlog
+        component: ManageBlog,
+        children: [
+          {
+            path: '',
+            redirect: 'manage-list'
+          },
+          {
+            path: 'manage-list',
+            component: ManageList,
+          },
+          {
+            path: 'manage-edit',
+            component: EditBlog
+          },
+        ]
       },
       {
         path: 'private-manage',
