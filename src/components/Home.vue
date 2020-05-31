@@ -22,11 +22,34 @@
         :router="true"
         :default-active="activePath">
 <!--          一级菜单-->
-          <el-menu-item v-for="menu in menuList" :key="menu.menuName" :index="baseUrl + '' + menu.menuPath"
-                        @click="saveNavState(baseUrl + '' + menu.menuPath)">
-            <i :class="menu.menuIcon"></i>
-            <span slot="title">{{menu.menuName}}</span>
-          </el-menu-item>
+          <div v-for="menu in menuList" :key="menu.menuName">
+            <div  v-if="menu.children.length !== 0" >
+              <el-submenu  :index="baseUrl + '' + menu.menuPath"
+                          @click="saveNavState(baseUrl + '' + menu.menuPath)">
+                <template slot="title">
+                  <i :class="menu.menuIcon"></i>
+                  <span slot="title">{{menu.menuName}}</span>
+                </template>
+
+                  <el-menu-item  v-for="subMenu in menu.children" :index="baseUrl + '' + menu.menuPath + '' + subMenu.menuPath" :key="subMenu.menuPath">
+                    <template slot="title">
+                      <i :class="subMenu.menuIcon"></i>
+                      <span slot="title">{{subMenu.menuName}}</span>
+                    </template>
+                  </el-menu-item>
+
+              </el-submenu>
+            </div>
+            <div v-else>
+              <el-menu-item :index="baseUrl + '' + menu.menuPath"
+                            @click="saveNavState(baseUrl + '' + menu.menuPath)">
+                <template slot="title">
+                  <i :class="menu.menuIcon"></i>
+                  <span slot="title">{{menu.menuName}}</span>
+                </template>
+              </el-menu-item>
+            </div>
+          </div>
         </el-menu>
       </el-aside>
 <!--      右侧内容主体-->
@@ -42,59 +65,73 @@
 
 <script>
   export default {
-    name: "Home",
-    data() {
-      return {
-        //是否折叠
-        isCollapse: false,
+      name: "Home",
+      data() {
+          return {
+              //是否折叠
+              isCollapse: false,
 
-        //公共路径
-        baseUrl: '/blog-admin',
+              //公共路径
+              baseUrl: '/blog-admin',
 
-        //导航栏上的路径和名称
-        menuList: [
-          {
-            menuName: '文章管理',
-            menuPath: '/manage-blog',
-            menuIcon: 'el-icon-s-management'
-          },
-          {
-            menuName: '写博客',
-            menuPath: '/write-blog',
-            menuIcon: 'el-icon-message-solid'
-          },
-          {
-            menuName: '个人信息',
-            menuPath: '/private-manage',
-            menuIcon: 'el-icon-s-order'
+              //导航栏上的路径和名称
+              menuList: [
+                  {
+                      menuName: '文章管理',
+                      menuPath: '/manage-blog',
+                      menuIcon: 'el-icon-s-management',
+                      children: [
+                          {
+                              menuName: '文章列表',
+                              menuPath: '/manage-list',
+                              menuIcon: 'el-icon-s-order',
+                          },
+                          {
+                              menuName: '修改文章',
+                              menuPath: '/manage-edit',
+                              menuIcon: 'el-icon-edit',
+                          }
+                      ]
+                  },
+                  {
+                      menuName: '写博客',
+                      menuPath: '/write-blog',
+                      menuIcon: 'el-icon-message-solid',
+                      children: []
+                  },
+                  {
+                      menuName: '个人信息',
+                      menuPath: '/private-manage',
+                      menuIcon: 'el-icon-s-order',
+                      children: []
+                  }
+              ],
+              //被激活的链接地址
+              activePath: ''
           }
-        ],
-        //被激活的链接地址
-        activePath: ''
-      }
-    },
-    created() {
-      this.activePath = window.sessionStorage.getItem('activePath');
-    },
-    methods: {
-      //登出函数
-      logOut() {
-        window.sessionStorage.clear();
-        this.$store.commit('logOutUser');
-        this.$router.replace('/');
       },
+      activated() {
+          this.activePath = window.sessionStorage.getItem('activePath');
+      },
+      methods: {
+          //登出函数
+          logOut() {
+              window.sessionStorage.clear();
+              this.$store.commit('logOutUser');
+              this.$router.replace('/');
+          },
 
-      //点击按钮切换菜单的折叠
-      toggleCollapse() {
-        this.isCollapse = !this.isCollapse;
-      },
-      //保存链接的激活状态
-      saveNavState(activePath) {
-        console.log(activePath);
-        window.sessionStorage.setItem('activePath', activePath);
-        this.activePath = activePath;
+          //点击按钮切换菜单的折叠
+          toggleCollapse() {
+              this.isCollapse = !this.isCollapse;
+          },
+          //保存链接的激活状态
+          saveNavState(activePath) {
+              console.log(activePath);
+              window.sessionStorage.setItem('activePath', activePath);
+              this.activePath = activePath;
+          }
       }
-    }
   }
 </script>
 
