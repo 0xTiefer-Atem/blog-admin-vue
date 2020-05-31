@@ -1,5 +1,4 @@
 <template>
-    <el-card class="ql-editor-card">
         <quill-editor
                 class="ql-editor"
                 v-model="content"
@@ -8,8 +7,6 @@
                 @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
                 @change="onEditorChange($event)">
         </quill-editor>
-    </el-card>
-
 </template>
 
 <script>
@@ -104,7 +101,6 @@
 </script>
 
 <style scoped>
-
     .ql-editor{
         height:800px;
     }
