@@ -6,24 +6,17 @@
     </el-breadcrumb>
 
 <!--    卡片视图区域-->
-    <el-card>
-      文章管理
-    </el-card>
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
-  import {request} from "../../network/request";
+
 
   export default {
     name: "BlogManage",
-    data() {
-      return {}
-    },
-
-    activated() {},
-
-    methods: {}
   }
 </script>
 
