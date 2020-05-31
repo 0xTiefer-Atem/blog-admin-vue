@@ -9,7 +9,7 @@
 
 <script>
   import {request} from "../../network/request";
-  import Editor from "./editor/Editor";
+  import Editor from "../common/Editor";
   export default {
       name: "Case",
       data() {
