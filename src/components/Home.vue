@@ -86,17 +86,12 @@
                               menuPath: '/manage-list',
                               menuIcon: 'el-icon-s-order',
                           },
-                          {
-                              menuName: '修改文章',
-                              menuPath: '/manage-edit',
-                              menuIcon: 'el-icon-edit',
-                          }
                       ]
                   },
                   {
                       menuName: '写博客',
                       menuPath: '/write-blog',
-                      menuIcon: 'el-icon-message-solid',
+                      menuIcon: 'el-icon-edit',
                       children: []
                   },
                   {
