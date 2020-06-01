@@ -1,7 +1,5 @@
 <template>
-  <el-card class="ql-editor-card">
     <editor></editor>
-  </el-card>
 </template>
 
 <script>
