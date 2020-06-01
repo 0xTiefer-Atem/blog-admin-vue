@@ -31,8 +31,8 @@
       <el-table-column
           label="操作">
         <template slot-scope="scope">
-          <el-button type="primary">修改</el-button>
-          <el-button type="danger">删除</el-button>
+          <el-button type="primary" @click="editBlog(scope.$index, scope.row)">修改</el-button>
+          <el-button type="danger" @click="deleteBlog(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -61,6 +61,13 @@
             })
         },
         methods: {
+            editBlog(index, row) {
+                console.log("edit",index, row);
+                this.$router.push("/blog-admin/manage-blog/manage-edit")
+            },
+            deleteBlog(index, row) {
+                console.log("delete",index, row);
+            }
         },
     }
 </script>
