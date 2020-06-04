@@ -63,7 +63,13 @@
         methods: {
             editBlog(index, row) {
                 console.log("edit",index, row);
-                this.$router.push("/blog-admin/manage-blog/manage-edit")
+                let blogId = row.blogId
+                this.$router.push({
+                  path: "/blog-admin/manage-blog/manage-edit",
+                  query: {
+                    blogId
+                  }
+                })
             },
             deleteBlog(index, row) {
                 console.log("delete",index, row);
