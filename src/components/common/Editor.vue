@@ -78,89 +78,101 @@
     //七牛云的AK: eiHzK04yfyyh-EymPKICBT-WFpanee7HXxXoDG78
     //七牛云的SK: 0kHNdQYXaD1cpgERUam2kbNuQpJbPZaHYR4OtU49
     export default {
-        name: "Editor",
-        components: {
-            quillEditor
-        },
-        activated() {
-            this.editorOption.modules.syntax = {
-                highlight: text => hljs.highlightAuto(text).value
-            }
-        },
-        data() {
-            return {
-                inputVisible: false,
-                inputValue: '',
-                content: "",
-                editorOption: {
-                    placeholder: '请输入文本...',
-                    modules: {
-                        toolbar: {
-                            container: toolbarOptions,  // 工具栏
-                        },
-                    },
-                },
-                uploadUrl: "",
-                qiniuForm: {},
-                blogInfo: {
-                    blogTitle: '',
-                    blogType: '',
-                    blogOverView: '',
-                    blogTagList: []
-                }
-            }
-        },
-        methods: {
-            onEditorReady(editor) { // 准备编辑器
+      name: "Editor",
+      components: {
+        quillEditor
+      },
+      activated() {
+        this.editorOption.modules.syntax = {
+          highlight: text => hljs.highlightAuto(text).value
+        }
 
-            },
-            onEditorBlur() {
-            }, // 失去焦点事件
-            onEditorFocus() {
-            }, // 获得焦点事件
-            onEditorChange({quill, html, text}) {
-                // 内容改变事件
-                console.log(html)
-                this.content = html
-            },
-            // 上传图片前
-            beforeUpload(res, file) {
-            },
-            // 上传图片成功
-            uploadSuccess(res, file) {
-            },
-            // 上传图片失败
-            uploadError(res, file) {
-            },
-            //返回上一级页面
-            goBack() {
-                this.$router.back();
-            },
-            handleClose(tag) {
-                this.blogInfo.blogTagList.splice(this.blogInfo.blogTagList.indexOf(tag), 1);
-            },
+        console.log(this.msg);
+      },
+      props: {
+        blog: {
+          type: Object,
+          default: () => {
 
-            showInput() {
-                this.inputVisible = true;
-                this.$nextTick(_ => {
-                    this.$refs.saveTagInput.$refs.input.focus();
-                });
+          }
+        }
+      },
+      data() {
+        return {
+          inputVisible: false,
+          inputValue: '',
+          content: "",
+          editorOption: {
+            placeholder: '请输入文本...',
+            modules: {
+              toolbar: {
+                container: toolbarOptions,  // 工具栏
+              },
             },
+          },
+          uploadUrl: "",
+          qiniuForm: {},
+          blogInfo: {
+            blogTitle: '',
+            blogType: '',
+            blogOverView: '',
+            blogTagList: []
+          }
+        }
+      },
+      methods: {
+        onEditorReady(editor) { // 准备编辑器
 
-            handleInputConfirm() {
-                let inputValue = this.inputValue;
-                if (inputValue) {
-                    this.blogInfo.blogTagList.push(inputValue);
-                }
-                this.inputVisible = false;
-                this.inputValue = '';
-            }
         },
-        computed: {},
-        beforeRouteUpdate(to,from,next) {
-            console.log("离开编辑")
-            next();
+        onEditorBlur() {
+        }, // 失去焦点事件
+        onEditorFocus() {
+        }, // 获得焦点事件
+        onEditorChange({quill, html, text}) {
+          // 内容改变事件
+          console.log(html)
+          this.content = html
         },
+        // 上传图片前
+        beforeUpload(res, file) {
+        },
+        // 上传图片成功
+        uploadSuccess(res, file) {
+        },
+        // 上传图片失败
+        uploadError(res, file) {
+        },
+        //返回上一级页面
+        goBack() {
+          this.$router.back();
+        },
+        handleClose(tag) {
+          this.blogInfo.blogTagList.splice(this.blogInfo.blogTagList.indexOf(tag), 1);
+        },
+
+        showInput() {
+          this.inputVisible = true;
+          this.$nextTick(_ => {
+            this.$refs.saveTagInput.$refs.input.focus();
+          });
+        },
+
+        handleInputConfirm() {
+          let inputValue = this.inputValue;
+          if (inputValue) {
+            this.blogInfo.blogTagList.push(inputValue);
+          }
+          this.inputVisible = false;
+          this.inputValue = '';
+        }
+      },
+      computed: {
+
+      },
+      beforeRouteUpdate(to, from, next) {
+        console.log("离开编辑")
+        next();
+      },
     }
 </script>
 
