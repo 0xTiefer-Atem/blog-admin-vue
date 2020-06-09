@@ -87,7 +87,7 @@
           highlight: text => hljs.highlightAuto(text).value
         }
 
-        console.log(this.msg);
+        console.log(this.blog);
       },
       props: {
         blog: {
@@ -116,6 +116,7 @@
             blogTitle: '',
             blogType: '',
             blogOverView: '',
+
             blogTagList: []
           }
         }
