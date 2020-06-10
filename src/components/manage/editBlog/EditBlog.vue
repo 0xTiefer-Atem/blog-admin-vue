@@ -11,7 +11,7 @@
         },
         created() {
             this.blog.blogId = this.$route.query.blogId
-            console.log(this.blog);
+            // console.log(this.blog);
         },
         data() {
             return {
