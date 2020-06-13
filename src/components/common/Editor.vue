@@ -108,7 +108,7 @@
               toolbar: {
                 container: toolbarOptions,  // 工具栏
               },
-            },
+            },s
           },
           uploadUrl: "",
           qiniuForm: {},
