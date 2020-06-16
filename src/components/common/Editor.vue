@@ -1,8 +1,14 @@
 <template>
   <el-card>
     <div slot="header">
-      <el-page-header @back="goBack" content="文章编辑">
-      </el-page-header>
+      <el-row>
+        <el-col :span="12">
+          <el-page-header @back="goBack" content="文章编辑"/>
+        </el-col>
+        <el-col :span="4" :offset="8">
+          <el-button size="medium" type="primary">保存</el-button>
+        </el-col>
+      </el-row>
     </div>
     <el-row :grunt="24">
       <el-col :span="12">
@@ -17,41 +23,43 @@
         标签:
         <el-tag
             :key="index"
-            v-for="(tag,index) in blogInfo.blogTagList"
+            v-for="(tag,index) in blogInfo.blogTagListJson"
             closable
             style="margin-right: 10px"
             :disable-transitions="false"
             @close="handleClose(tag)">
-          {{tag}}
+          {{tag.name}}
         </el-tag>
         <el-input
-            style="width: 300px;margin-top: 10px;margin-left: 5px"
+            style="width: 100px;margin-top: 10px;margin-left: 5px"
             class="input-new-tag"
             v-if="inputVisible"
             v-model="inputValue"
             ref="saveTagInput"
             @keyup.enter.native="handleInputConfirm"
-            @blur="handleInputConfirm"
-        >
+            @blur="handleInputConfirm">
         </el-input>
         <el-button v-else style="margin-top: 10px"  class="button-new-tag" @click="showInput">+</el-button>
       </el-col>
       <el-col :span="12">
-        概要:<el-input v-model="blogInfo.blogOverView" style="width: 300px;margin: 10px"></el-input>
+        概要:<el-input v-model="blogInfo.blogOverview" style="width: 300px;margin: 10px"></el-input>
       </el-col>
     </el-row>
-    <quill-editor
-        class="ql-editor"
-        v-model="content"
-        ref="myQuillEditor"
-        :options="editorOption"
-        @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
-        @change="onEditorChange($event)">
-    </quill-editor>
+    <div v-highlight-a v-highlight-b>
+      <quill-editor
+              class="ql-editor"
+              v-model="blogInfo.blogContent"
+              ref="myQuillEditor"
+              :options="editorOption"
+              @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
+              @change="onEditorChange($event)">
+      </quill-editor>
+    </div>
   </el-card>
 </template>
 
 <script>
+    import {request} from "../../network/request";
     import hljs from 'highlight.js'
     import { quillEditor } from "vue-quill-editor"; //调用编辑器
     import 'quill/dist/quill.core.css';
@@ -83,11 +91,14 @@
         quillEditor
       },
       activated() {
-        this.editorOption.modules.syntax = {
-          highlight: text => hljs.highlightAuto(text).value
+        console.log(this.blog);
+        if(this.blog !== undefined) {
+          //说明修改文章
+          this.status = 0;
+          this.selectBlogById(this.blog)
         }
 
-        console.log(this.blog);
+        //说明写文章
       },
       props: {
         blog: {
@@ -101,7 +112,6 @@
         return {
           inputVisible: false,
           inputValue: '',
-          content: "",
           editorOption: {
             placeholder: '请输入文本...',
             modules: {
@@ -112,12 +122,16 @@
           },
           uploadUrl: "",
           qiniuForm: {},
+
+
+          //此时文章的状态，默认为 1 新加文章，0为修改文章
+          status: 1 ,
           blogInfo: {
             blogTitle: '',
             blogType: '',
-            blogOverView: '',
-
-            blogTagList: []
+            blogOverview: '',
+            blogContent : '',
+            blogTagListJson: []
           }
         }
       },
@@ -132,7 +146,7 @@
         onEditorChange({quill, html, text}) {
           // 内容改变事件
           console.log(html)
-          this.content = html
+          this.blogInfo.blogContent = html
         },
         // 上传图片前
         beforeUpload(res, file) {
@@ -148,7 +162,7 @@
           this.$router.back();
         },
         handleClose(tag) {
-          this.blogInfo.blogTagList.splice(this.blogInfo.blogTagList.indexOf(tag), 1);
+          this.blogInfo.blogTagListJson.splice(this.blogInfo.blogTagListJson.indexOf(tag), 1);
         },
 
         showInput() {
@@ -161,17 +175,29 @@
         handleInputConfirm() {
           let inputValue = this.inputValue;
           if (inputValue) {
-            this.blogInfo.blogTagList.push(inputValue);
+            let tag = {};
+            tag.name = inputValue
+            this.blogInfo.blogTagListJson.push(tag);
           }
           this.inputVisible = false;
           this.inputValue = '';
+        },
+
+        selectBlogById(blog) {
+          request({
+            url: '/api/blog/selectOne?id='+blog.blogId+'&status='+blog.blogStatus,
+            method: 'get',
+          }).then( res => {
+            let resData = res.data;
+            console.log(resData);
+            if(resData.status === 2000) {
+              this.blogInfo = resData.result.data
+            }
+          })
         }
       },
-      computed: {
-
-      },
-      beforeRouteUpdate(to, from, next) {
-        console.log("离开编辑")
+      beforeRouteUpdate(to, from , next) {
+        console.log(to)
         next();
       },
     }
