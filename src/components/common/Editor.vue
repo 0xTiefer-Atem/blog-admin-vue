@@ -6,7 +6,7 @@
           <el-page-header @back="goBack" content="文章编辑"/>
         </el-col>
         <el-col :span="4" :offset="8">
-          <el-button size="medium" type="primary">保存</el-button>
+          <el-button size="medium" type="primary" @click="optBlog">保存</el-button>
         </el-col>
       </el-row>
     </div>
@@ -23,7 +23,7 @@
         标签:
         <el-tag
             :key="index"
-            v-for="(tag,index) in blogInfo.blogTagListJson"
+            v-for="(tag,index) in blogInfo.blogTagList"
             closable
             style="margin-right: 10px"
             :disable-transitions="false"
@@ -131,7 +131,7 @@
             blogType: '',
             blogOverview: '',
             blogContent : '',
-            blogTagListJson: []
+            blogTagList: []
           }
         }
       },
@@ -162,7 +162,7 @@
           this.$router.back();
         },
         handleClose(tag) {
-          this.blogInfo.blogTagListJson.splice(this.blogInfo.blogTagListJson.indexOf(tag), 1);
+          this.blogInfo.blogTagList.splice(this.blogInfo.blogTagList.indexOf(tag), 1);
         },
 
         showInput() {
@@ -177,7 +177,7 @@
           if (inputValue) {
             let tag = {};
             tag.name = inputValue
-            this.blogInfo.blogTagListJson.push(tag);
+            this.blogInfo.blogTagList.push(tag);
           }
           this.inputVisible = false;
           this.inputValue = '';
@@ -185,20 +185,34 @@
 
         selectBlogById(blog) {
           request({
-            url: '/api/blog/selectOne?id='+blog.blogId+'&status='+blog.blogStatus,
+            url: '/api/blog/selectOneBlog?id='+blog.blogId+'&status='+blog.blogStatus,
             method: 'get',
           }).then( res => {
             let resData = res.data;
             console.log(resData);
             if(resData.status === 2000) {
               this.blogInfo = resData.result.data
+              this.blogInfo.blogTagList = JSON.parse(this.blogInfo.blogTagList)
             }
           })
+        },
+
+        optBlog() {
+          let blog = {};
+          blog.blogTagList = JSON.stringify(this.blogInfo.blogTagList);
+          blog.blogTitle = this.blogInfo.blogTitle;
+          blog.blogType = this.blogInfo.blogType;
+          blog.blogOverview = this.blogInfo.blogOverview;
+          blog.blogContent = this.blogInfo.blogContent;
+          request({
+            url: '/api/blog/insertNewBlog',
+            method: 'post',
+            data: blog
+          }).then( res => {
+            let resData = res.data;
+            console.log(resData)
+          })
         }
-      },
-      beforeRouteUpdate(to, from , next) {
-        console.log(to)
-        next();
       },
     }
 </script>
