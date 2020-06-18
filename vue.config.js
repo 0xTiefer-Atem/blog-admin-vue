@@ -7,7 +7,7 @@ module.exports = {
         target: 'http://localshot:9192/api', // 代理目标的基础路径
         // secure: false,  // 如果是https接口，需要配置这个参数
         ws: true,
-        changeOrigin: true, // 支持跨域
+        // changeOrigin: true, // 支持跨域
       }
     }
   }
