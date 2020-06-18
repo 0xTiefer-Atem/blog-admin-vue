@@ -97,7 +97,6 @@
           this.status = 0;
           this.selectBlogById(this.blog)
         }
-
         //说明写文章
       },
       props: {
@@ -126,7 +125,9 @@
 
           //此时文章的状态，默认为 1 新加文章，0为修改文章
           status: 1 ,
+
           blogInfo: {
+            blogId: '',
             blogTitle: '',
             blogType: '',
             blogOverview: '',
@@ -145,7 +146,7 @@
         }, // 获得焦点事件
         onEditorChange({quill, html, text}) {
           // 内容改变事件
-          console.log(html)
+          // console.log(html)
           this.blogInfo.blogContent = html
         },
         // 上传图片前
@@ -199,18 +200,27 @@
 
         optBlog() {
           let blog = {};
+          blog.blogId = this.blogInfo.blogId
           blog.blogTagList = JSON.stringify(this.blogInfo.blogTagList);
           blog.blogTitle = this.blogInfo.blogTitle;
           blog.blogType = this.blogInfo.blogType;
           blog.blogOverview = this.blogInfo.blogOverview;
           blog.blogContent = this.blogInfo.blogContent;
+          let url = '/api/blog/insertNewBlog'
+          if(this.status === 0) {
+            url = '/api/blog/updateBlog'
+            console.log("更新博客");
+          }
           request({
-            url: '/api/blog/insertNewBlog',
+            url: url,
             method: 'post',
             data: blog
           }).then( res => {
             let resData = res.data;
-            console.log(resData)
+            if(resData.status === 2000) {
+              console.log("操作成功");
+              this.$message.success("操作成功")
+            }
           })
         }
       },
