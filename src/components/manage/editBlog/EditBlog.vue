@@ -9,15 +9,13 @@
         components: {
             Editor
         },
-        created() {
+        activated() {
             this.blog.blogId = this.$route.query.blogId
-            // console.log(this.blog);
+            this.blog.blogStatus = this.$route.query.blogStatus
         },
         data() {
             return {
-                blog: {
-
-                }
+                blog: {}
             }
         },
         methods: {},
