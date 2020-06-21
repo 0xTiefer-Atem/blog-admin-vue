@@ -95,21 +95,12 @@
       quillEditor
     },
     activated() {
-      console.log(this.blog);
       if (this.blog !== undefined) {
         //说明修改文章
         this.status = 0;
-        this.selectBlogById(this.blog)
+        this.selectBlogById()
       }
       //说明写文章
-    },
-    props: {
-      blog: {
-        type: Object,
-        default: () => {
-
-        }
-      }
     },
     data() {
       return {
@@ -188,10 +179,12 @@
         this.inputValue = '';
       },
 
-      selectBlogById(blog) {
-        console.log(blog.blogId);
+      selectBlogById() {
+        let blog = this.$store.getters.getBlogInfo;
+        let blogId = blog.blogId
+        let blogStatus = blog.blogStatus
         request({
-          url: '/api/blog/selectOneBlog?id=' + blog.blogId + '&status=' + blog.blogStatus,
+          url: '/api/blog/selectOneBlog?id=' + blogId + '&status=' + blogStatus,
           method: 'get',
         }).then(res => {
           let resData = res.data;
