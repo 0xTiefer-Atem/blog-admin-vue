@@ -21,6 +21,14 @@
         methods: {},
         comments: {
             Editor
+        },
+        watch:{
+            'blog': {
+                deep: true,
+                handler(nv, ov) {
+                    console.log(nv)
+                }
+            }
         }
     }
 </script>
