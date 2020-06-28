@@ -11,13 +11,12 @@
 <!--    页面主体区-->
     <el-container>
 <!--      侧边栏-->
-      <el-aside :width="isCollapse ? '64px' : '200px'">
-        <div class="toggle-button" @click="toggleCollapse">|||</div>
+      <el-aside width='180px'>
+        <div class="toggle-button">|||</div>
 <!--        侧边栏菜单区域-->
         <el-menu background-color="#333744"
         text-color="#fff"
         active-text-color="#409eff"
-        :collapse="isCollapse"
         :collapse-transition="false"
         :router="true"
         :default-active="activePath">
@@ -122,7 +121,7 @@
           },
           //保存链接的激活状态
           saveNavState(activePath) {
-              console.log(activePath);
+              // console.log(activePath);
               window.sessionStorage.setItem('activePath', activePath);
               this.activePath = activePath;
           }
