@@ -2,11 +2,11 @@
 export default {
   //上面的state是自动往这里面的函数里传入的
 
-  updateStaffId(state, payLoad){
-    console.log(payLoad);
-    state.staffId = payLoad;
-    console.log(state.staffId);
+  updateBlogInfo(state, payLoad){
+    console.log(payLoad.blog);
+    state.blog = payLoad.blog
   },
+
   logOutUser(state) {
     state.staffId = ''
   },
@@ -15,7 +15,6 @@ export default {
   addCount(state, payLoad) {
     //普通风格操作
     // state.counter += payLoad;
-
     //特殊风格操作
     state.counter += payLoad.num;
   }
