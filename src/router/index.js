@@ -5,7 +5,9 @@ const Home = () => import('../components/Home');
 const ManageBlog = () => import('../components/manage/ManageBlog');
 const ManageList = () => import('../components/manage/manageList/ManageList');
 const EditBlog = () => import('../components/manage/editBlog/EditBlog');
+const PEditBlog = () => import('../components/personal/editBlog/PEditBlog');
 const PrivateManage = () => import('../components/personal/PrivateManage');
+const PrivateInfoCard = () => import('../components/personal/privateInfoCard/PrivateInfoCard');
 const WriteBlog = () => import('../components/write/WriteBlog');
 
 Vue.use(VueRouter);
@@ -53,7 +55,21 @@ const routes = [
       },
       {
         path: 'private-manage',
-        component: PrivateManage
+        component: PrivateManage,
+        children: [
+          {
+            path: '',
+            redirect: 'private-info-card'
+          },
+          {
+            path: 'private-info-card',
+            component: PrivateInfoCard
+          },
+          {
+            path: 'private-edit',
+            component: PEditBlog
+          },
+        ]
       },
       {
         path: 'write-blog',
