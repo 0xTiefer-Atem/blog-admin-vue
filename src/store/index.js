@@ -11,7 +11,10 @@ Vue.use(Vuex);
  //里面放入的对象参数
   //存放一些变量的值
 const state = {
-    staffId: '',
+    blog: {
+      blogId: '',
+      blogStatus: '',
+    }
   };
 //3. 创建Vuex对象
 const store = new Vuex.Store({
@@ -19,6 +22,11 @@ const store = new Vuex.Store({
 
   //定义一些对state里面变量的方法函数
   mutations,
+  getters: {
+    getBlogInfo() {
+      return state.blog;
+    }
+  }
 });
 
 //4. 导出Vuex创建的对象
