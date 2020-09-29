@@ -1,5 +1,5 @@
 <template>
-    <editor :blog="blog"></editor>
+    <editor :blogMsg="blog"></editor>
 </template>
 
 <script>
@@ -11,7 +11,6 @@
         },
         activated() {
             this.blog.blogId = this.$route.query.blogId
-            this.blog.blogStatus = this.$route.query.blogStatus
         },
         data() {
             return {
