@@ -30,7 +30,8 @@
       </el-table-column>
       <el-table-column
           prop="createTime"
-          label="更新时间">
+          :formatter="dateFormat"
+          label="创建时间">
       </el-table-column>
       <el-table-column
           label="操作">
@@ -52,7 +53,8 @@
 </template>
 
 <script>
-    import {request} from "../../../network/request";
+    import {request} from "@/network/request";
+    import moment from 'moment'
     export default {
       name: "ManageList",
       data() {
@@ -65,14 +67,22 @@
         this.selectAll()
       },
       methods: {
+        /*日期处理*/
+        dateFormat(row,column){
+          let date = row[column.property];
+          if(date === undefined){
+            return ''
+          }
+          return moment(date).format("YYYY-MM-DD HH:mm")
+        },
         selectAll() {
           request({
-            url: '/api/blog/selectAll?offset=0&limit=6'
+            url: '/api/blog/list?pageNum=1&pageSize=10'
           }).then(res => {
             let resData = res.data;
-            console.log(resData)
-            if (resData.status === 2000) {
-              let blogListData = resData.result.data;
+            if (resData.status === 200) {
+              let blogListData = resData.result.data.list;
+              console.log(blogListData)
               for (let i = 0; i <blogListData.length; i++) {
                 blogListData[i].blogTagList = JSON.parse(blogListData[i].blogTagList);
               }
@@ -81,30 +91,23 @@
           })
         },
         editBlog(index, row) {
-          console.log(row);
-          let blogStatus = row.blogStatus;
           let blogId = row.blogId
           this.$router.push({
             path: "/blog-admin/manage-blog/manage-edit",
             query: {
-              blogId,
-              blogStatus
+              blogId
             }
           })
         },
         deleteBlog(index, row) {
           console.log("delete", index, row);
-          let id = row.blogId;
-          let jsonData = {
-            id
-          }
+          let blogId = row.blogId;
           request({
-            url: '/api/blog/updateOneBlogStatus',
-            method: 'post',
-            data: jsonData
+            url: '/api/blog/update/status?blogId='+blogId+'Bdff01601364803522&status=-1',
+            method: 'get'
           }).then( res => {
             let resData = res.data;
-            if(resData.status === 2000) {
+            if(resData.status === 200) {
               this.$message.success("文章删除成功")
               this.selectAll();
             }
