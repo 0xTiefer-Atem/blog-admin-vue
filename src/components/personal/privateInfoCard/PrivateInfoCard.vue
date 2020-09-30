@@ -21,7 +21,7 @@
                     <el-row :grunt="24">
                       <el-col :span="12" :offset="12">
                         <div>
-                          <el-tag>{{info.createTime}}</el-tag>
+                          <el-tag>{{dateFormat(info.createTime)}}</el-tag>
                         </div>
                       </el-col>
                     </el-row>
@@ -37,8 +37,8 @@
 </template>
 
 <script>
-  import {request} from "../../../network/request";
-
+  import {request} from "@/network/request";
+  import moment from "moment";
   export default {
     name: "PrivateManage",
     data() {
@@ -48,12 +48,12 @@
     },
     activated() {
       request({
-        url: '/api/blog/selectSpecialBlog',
+        url: '/api/blog/query/special',
         method: 'get'
       }).then(res => {
         let resData = res.data;
         console.log(resData);
-        if (resData.status === 2000) {
+        if (resData.status === 200) {
           this.personalInfoList = resData.result.data;
         } else {
           this.$message.error("文章查询失败")
@@ -61,6 +61,10 @@
       })
     },
     methods: {
+      /*日期处理*/
+      dateFormat(date){
+        return moment(date).format("YYYY-MM-DD HH:mm")
+      },
       personalDetailClick(info) {
         console.log(info)
         let query = {}
