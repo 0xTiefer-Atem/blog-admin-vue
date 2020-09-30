@@ -5,9 +5,6 @@
         <el-col :span="12">
           <el-page-header @back="goBack" content="博客编辑"/>
         </el-col>
-        <el-col :span="4" :offset="8">
-          <el-button size="medium" type="primary" @click="addBlog">保存</el-button>
-        </el-col>
       </el-row>
     </div>
     <el-row :grunt="24">
@@ -48,15 +45,20 @@
         <el-input v-model="blogInfo.blogOverview" style="width: 300px;margin: 10px"></el-input>
       </el-col>
     </el-row>
-    <div>
-      <mavon-editor @save="addBlog"
-                    v-highlight
-                    codeStyle="atom-one-dark"
-                    :boxShadow="false"
-                    @change="contentChange"
-                    class="mk-editor"
-                    v-model="blogInfo.blogRawContent"/>
-    </div>
+    <el-row>
+      <el-col>
+        <el-button style="float: right; margin-right: 10px" type="text" @click="addBlog">保存</el-button>
+      </el-col>
+      <el-col>
+        <mavon-editor @save="addBlog"
+                      v-highlight
+                      codeStyle="atom-one-dark"
+                      :boxShadow="false"
+                      @change="contentChange"
+                      class="mk-editor"
+                      v-model="blogInfo.blogRawContent"/>
+      </el-col>
+    </el-row>
   </el-card>
 </template>
 
@@ -125,23 +127,6 @@ export default {
       }
       this.inputVisible = false;
       this.inputValue = '';
-    },
-
-    //更新博客
-    updateBlog() {
-      let postBlogData = this.optBlogData();
-      let url = '/api/blog/update/content'
-      request({
-        url: url,
-        method: 'post',
-        data: postBlogData
-      }).then(res => {
-        let resData = res.data;
-        if (resData.status === 200) {
-          console.log("操作成功");
-          this.$message.success("更新成功")
-        }
-      })
     },
 
 
