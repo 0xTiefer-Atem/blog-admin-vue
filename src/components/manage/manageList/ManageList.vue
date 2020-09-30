@@ -103,7 +103,7 @@
           console.log("delete", index, row);
           let blogId = row.blogId;
           request({
-            url: '/api/blog/update/status?blogId='+blogId+'Bdff01601364803522&status=-1',
+            url: '/api/blog/update/status?blogId='+blogId+'&status=-1',
             method: 'get'
           }).then( res => {
             let resData = res.data;
