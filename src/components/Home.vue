@@ -12,7 +12,7 @@
     <el-container>
 <!--      侧边栏-->
       <el-aside width='180px'>
-        <div class="toggle-button">|||</div>
+<!--        <div class="toggle-button">|||</div>-->
 <!--        侧边栏菜单区域-->
         <el-menu background-color="#333744"
         text-color="#fff"
