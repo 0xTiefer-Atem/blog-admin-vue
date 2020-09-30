@@ -5,34 +5,34 @@
         <el-col :span="12">
           <el-page-header @back="goBack" content="博客更新"/>
         </el-col>
-        <el-col :span="4" :offset="8">
-          <el-button size="medium" type="primary" @click="updateBlog">保存</el-button>
-        </el-col>
       </el-row>
     </div>
     <el-row :grunt="24">
       <el-col :span="12">
         标题:
-        <el-input v-model="blogInfo.blogTitle" style="width: 300px;margin: 10px"></el-input>
+        <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogTitle"
+                  style="width: 300px;margin: 10px"></el-input>
       </el-col>
       <el-col :span="12">
         分类:
-        <el-input v-model="blogInfo.blogType" style="width: 300px;margin: 10px"></el-input>
+        <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogType"
+                  style="width: 300px;margin: 10px"></el-input>
       </el-col>
     </el-row>
     <el-row :grunt="24">
       <el-col :span="12">
         标签:
         <el-tag
+            :closable="markDownEditable.isEditable"
             :key="index"
             v-for="(tag,index) in blogInfo.blogTagList"
-            closable
             style="margin-right: 10px"
             :disable-transitions="false"
             @close="handleClose(tag)">
           {{ tag.name }}
         </el-tag>
         <el-input
+            :disabled="!markDownEditable.isEditable"
             style="width: 100px;margin-top: 10px;margin-left: 5px"
             class="input-new-tag"
             v-if="inputVisible"
@@ -41,23 +41,52 @@
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm">
         </el-input>
-        <el-button v-else style="margin-top: 10px" class="button-new-tag" @click="showInput">+</el-button>
+        <el-button :disabled="!markDownEditable.isEditable" v-else style="margin-top: 10px" class="button-new-tag"
+                   @click="showInput">+
+        </el-button>
       </el-col>
       <el-col :span="12">
         概要:
-        <el-input v-model="blogInfo.blogOverview" style="width: 300px;margin: 10px"></el-input>
+        <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogOverview"
+                  style="width: 300px;margin: 10px"></el-input>
       </el-col>
     </el-row>
-    <div>
-      <mavon-editor
-          @save="updateBlog"
-          v-highlight
-          codeStyle="atom-one-dark"
-          :boxShadow="false"
-          @change="contentChange"
-          class="mk-editor"
-          v-model="blogInfo.blogRawContent"/>
-    </div>
+    <el-row>
+      <el-col>
+        <el-button style="float: right; margin-right: 10px" size="medium" type="text" @click="updateBlog">保存</el-button>
+        <el-button
+            v-if="markDownEditable.isEditable"
+            @click="preview"
+            type="text"
+            style="margin-bottom: 10px;margin-right: 10px; float: right"
+            icon="el-icon-view">
+          预览
+        </el-button>
+        <el-button
+            v-if="!markDownEditable.isEditable"
+            style="margin-bottom: 10px;margin-right: 10px; float: right"
+            type="text"
+            @click="edit"
+            icon="el-icon-edit">
+          编辑
+        </el-button>
+      </el-col>
+      <el-col>
+        <mavon-editor
+            @save="updateBlog"
+            :subfield="markDownEditable.subfield"
+            :defaultOpen="'preview'"
+            :toolbarsFlag="markDownEditable.toolbarsFlag"
+            :editable="markDownEditable.editable"
+            v-highlight
+            codeStyle="atom-one-dark"
+            :boxShadow="false"
+            @change="contentChange"
+            class="mk-editor"
+            v-model="blogInfo.blogRawContent"/>
+      </el-col>
+    </el-row>
+
   </el-card>
 </template>
 
@@ -84,6 +113,15 @@ export default {
       inputValue: '',
       uploadUrl: "",
 
+      //默认预览模式
+      markDownEditable: {
+        isEditable: false,
+        subfield: false,
+        defaultOpen: 'preview',
+        toolbarsFlag: false,
+        editable: false
+      },
+
       //markdown渲染后的值
       renderValue: '',
 
@@ -100,6 +138,24 @@ export default {
     }
   },
   methods: {
+    //编辑模式
+    edit() {
+      this.markDownEditable.isEditable = true;
+      this.markDownEditable.subfield = true;
+      this.markDownEditable.defaultOpen = 'edit';
+      this.markDownEditable.toolbarsFlag = true;
+      this.markDownEditable.editable = true;
+    },
+
+    //预览模式
+    preview() {
+      this.markDownEditable.isEditable = false;
+      this.markDownEditable.subfield = false;
+      this.markDownEditable.defaultOpen = 'preview';
+      this.markDownEditable.toolbarsFlag = false;
+      this.markDownEditable.editable = false;
+    },
+
     //返回上一级页面
     goBack() {
       this.$router.back();
@@ -166,6 +222,7 @@ export default {
         if (resData.status === 200) {
           console.log("操作成功");
           this.$message.success("更新成功")
+          this.preview()
         }
       })
     }
