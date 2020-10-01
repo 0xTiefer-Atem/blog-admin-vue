@@ -10,6 +10,7 @@ const PEditBlog = () => import('../components/personal/editBlog/PEditBlog');
 const PrivateManage = () => import('../components/personal/PrivateManage');
 const PrivateInfoCard = () => import('../components/personal/privateInfoCard/PrivateInfoCard');
 const WriteBlog = () => import('../components/write/WriteBlog');
+const PersonalDetail = () => import('../components/personal/personalInfo/PersonalDetail')
 
 Vue.use(VueRouter);
 
@@ -70,6 +71,10 @@ const routes = [
                         path: 'private-edit',
                         component: PEditBlog
                     },
+                    {
+                        path: 'personal-detail',
+                        component: PersonalDetail
+                    }
                 ]
             },
             {
