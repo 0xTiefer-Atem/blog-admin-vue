@@ -3,7 +3,7 @@
     <div slot="header">
       <el-row>
         <el-col :span="12">
-          <el-page-header @back="goBack" content="博客更新"/>
+          <el-page-header @back="goBack" :content="'更新-'+blogInfo.blogTitle"/>
         </el-col>
       </el-row>
     </div>
@@ -103,9 +103,6 @@ export default {
     this.blogInfo.blogId = this.$route.query.blogId
     this.selectBlogById(this.blogInfo.blogId)
   },
-  props: {
-    blogMsg: Object //这样可以指定传入的类型，如果类型不对，会警告
-  },
   data() {
     return {
       inputVisible: false,
@@ -166,7 +163,6 @@ export default {
 
     contentChange(value, render) {
       this.renderValue = render;
-      console.log(this.renderValue)
     },
 
     showInput() {
