@@ -3,15 +3,15 @@
     <!--    头部区域-->
     <el-header>
       <div>
-        <img class="logo-img" src="../assets/logo.png" alt="">
-        <span class="system_title">个人博客后台管理系统</span>
+        <el-avatar class="logo-img" src="http://47.107.64.157/user/avatar/tx1.jpeg" alt=""/>
+        <span class="system_title">王骞-个人博客后台管理系统</span>
       </div>
-      <el-button type="info" @click="logOut">退出</el-button>
+      <el-button type="text" @click="logOut">退出</el-button>
     </el-header>
     <!--    页面主体区-->
     <el-container>
       <!--      侧边栏-->
-      <el-aside width='180px'>
+      <el-aside width='200px'>
         <!--        <div class="toggle-button">|||</div>-->
         <!--        侧边栏菜单区域-->
         <el-menu background-color="#333744"
