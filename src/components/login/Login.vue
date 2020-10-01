@@ -3,7 +3,7 @@
     <div class="login_box">
       <!--      头像区域-->
       <div class="avatar_box">
-        <img src="http://47.107.64.157/user/avatar/tx1.jpeg" alt="">
+        <img src="http://47.107.64.157/user/avatar/13db1601560435449.jpeg" alt="">
       </div>
       <div style="margin-bottom: 10px">
         <h3 class="title">个人博客管理系统</h3>

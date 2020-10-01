@@ -3,7 +3,7 @@
     <!--    头部区域-->
     <el-header>
       <div>
-        <el-avatar class="logo-img" src="http://47.107.64.157/user/avatar/tx1.jpeg" alt=""/>
+        <el-avatar class="logo-img" src="http://47.107.64.157/user/avatar/13db1601560435449.jpeg" alt=""/>
         <span class="system_title">王骞-个人博客后台管理系统</span>
       </div>
       <el-button type="text" @click="logOut">退出</el-button>
