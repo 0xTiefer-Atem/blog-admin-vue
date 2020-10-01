@@ -53,7 +53,7 @@
     </el-row>
     <el-row>
       <el-col>
-        <el-button style="float: right; margin-right: 10px" size="medium" type="text" @click="updateBlog">保存</el-button>
+        <el-button style="float: right; margin-right: 10px" type="text" @click="updateBlog">保存</el-button>
         <el-button
             v-if="markDownEditable.isEditable"
             @click="preview"
@@ -103,9 +103,6 @@ export default {
     console.log(this.$route.query.blogId)
     this.blogInfo.blogId = this.$route.query.blogId
     this.selectBlogById(this.blogInfo.blogId)
-  },
-  props: {
-    blogMsg: Object //这样可以指定传入的类型，如果类型不对，会警告
   },
   data() {
     return {
