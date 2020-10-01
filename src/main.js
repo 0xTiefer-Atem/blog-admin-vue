@@ -15,12 +15,6 @@ import 'mavon-editor/dist/css/index.css'
 import Highlight from './assets/js/highlight'; // from 路径是highlight.js的路径，纯属自定义
 
 
-
-
-
-
-
-
 Vue.use(ElementUI);
 Vue.use(mavonEditor)
 Vue.use(Highlight);
@@ -28,7 +22,7 @@ Vue.config.productionTip = false;
 
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')

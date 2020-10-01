@@ -5,13 +5,13 @@ import 'highlight.js/styles/dark.css' // 样式文件
 
 let Highlight = {};
 Highlight.install = function (Vue, options) {
-  // 先有数据再绑定，调用highlightA
-  Vue.directive('highlight', function (el) {
-    let blocks = el.querySelectorAll('pre code')
-    blocks.forEach((block) => {
-      hljs.highlightBlock(block)
+    // 先有数据再绑定，调用highlightA
+    Vue.directive('highlight', function (el) {
+        let blocks = el.querySelectorAll('pre code')
+        blocks.forEach((block) => {
+            hljs.highlightBlock(block)
+        })
     })
-  })
 };
 
 export default Highlight;

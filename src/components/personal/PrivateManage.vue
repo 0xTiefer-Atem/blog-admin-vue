@@ -12,9 +12,9 @@
 
 <script>
 
-  export default {
-    name: "PrivateManage",
-  }
+export default {
+  name: "PrivateManage",
+}
 </script>
 
 <style scoped>

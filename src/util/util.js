@@ -1,7 +1,7 @@
 function formatDate(value) {
     let date = new Date(value);
     let year = date.getFullYear();
-    let month = padDate(date.getMonth()+1);
+    let month = padDate(date.getMonth() + 1);
     let day = padDate(date.getDate());
     let hours = padDate(date.getHours());
     let minutes = padDate(date.getMinutes());

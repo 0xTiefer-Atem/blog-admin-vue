@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 const Login = () => import('../components/login/Login');
 const Home = () => import('../components/Home');
 const ManageBlog = () => import('../components/manage/ManageBlog');
@@ -14,74 +15,74 @@ Vue.use(VueRouter);
 
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
+    return originalPush.call(this, location).catch(err => err)
 };
 
 const routes = [
 
-  {
-    path: '',
-    redirect: '/blog-admin/blog-login'
-  },
-  {
-    path: '/blog-admin/blog-login',
-    component: Login,
-  },
-  {
-    path: '/blog-admin',
-    component: Home,
-    children: [
-      {
+    {
         path: '',
-        redirect: 'manage-blog'
-      },
-      {
-        path: 'manage-blog',
-        component: ManageBlog,
+        redirect: '/blog-admin/blog-login'
+    },
+    {
+        path: '/blog-admin/blog-login',
+        component: Login,
+    },
+    {
+        path: '/blog-admin',
+        component: Home,
         children: [
-          {
-            path: '',
-            redirect: 'manage-list'
-          },
-          {
-            path: 'manage-list',
-            component: ManageList,
-          },
-          {
-            path: 'manage-edit',
-            component: EditBlog
-          },
+            {
+                path: '',
+                redirect: 'manage-blog'
+            },
+            {
+                path: 'manage-blog',
+                component: ManageBlog,
+                children: [
+                    {
+                        path: '',
+                        redirect: 'manage-list'
+                    },
+                    {
+                        path: 'manage-list',
+                        component: ManageList,
+                    },
+                    {
+                        path: 'manage-edit',
+                        component: EditBlog
+                    },
+                ]
+            },
+            {
+                path: 'private-manage',
+                component: PrivateManage,
+                children: [
+                    {
+                        path: '',
+                        redirect: 'private-info-card'
+                    },
+                    {
+                        path: 'private-info-card',
+                        component: PrivateInfoCard
+                    },
+                    {
+                        path: 'private-edit',
+                        component: PEditBlog
+                    },
+                ]
+            },
+            {
+                path: 'write-blog',
+                component: WriteBlog
+            },
         ]
-      },
-      {
-        path: 'private-manage',
-        component: PrivateManage,
-        children: [
-          {
-            path: '',
-            redirect: 'private-info-card'
-          },
-          {
-            path: 'private-info-card',
-            component: PrivateInfoCard
-          },
-          {
-            path: 'private-edit',
-            component: PEditBlog
-          },
-        ]
-      },
-      {
-        path: 'write-blog',
-        component: WriteBlog
-      },
-    ]
-  }
+    }
 ];
 
 const router = new VueRouter({
-  routes,
-  mode: 'history'
+    routes,
+    mode: 'history'
 });
 
 

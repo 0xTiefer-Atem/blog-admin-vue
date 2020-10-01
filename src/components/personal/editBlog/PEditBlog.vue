@@ -10,11 +10,13 @@
     <el-row :grunt="24">
       <el-col :span="12">
         标题:
-        <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogTitle" style="width: 300px;margin: 10px"></el-input>
+        <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogTitle"
+                  style="width: 300px;margin: 10px"></el-input>
       </el-col>
       <el-col :span="12">
         分类:
-        <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogType" style="width: 300px;margin: 10px"></el-input>
+        <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogType"
+                  style="width: 300px;margin: 10px"></el-input>
       </el-col>
     </el-row>
     <el-row :grunt="24">
@@ -39,11 +41,14 @@
             @keyup.enter.native="handleInputConfirm"
             @blur="handleInputConfirm">
         </el-input>
-        <el-button :disabled="!markDownEditable.isEditable" v-else style="margin-top: 10px" class="button-new-tag" @click="showInput">+</el-button>
+        <el-button :disabled="!markDownEditable.isEditable" v-else style="margin-top: 10px" class="button-new-tag"
+                   @click="showInput">+
+        </el-button>
       </el-col>
       <el-col :span="12">
         概要:
-        <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogOverview" style="width: 300px;margin: 10px"></el-input>
+        <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogOverview"
+                  style="width: 300px;margin: 10px"></el-input>
       </el-col>
     </el-row>
     <el-row>
