@@ -6,7 +6,7 @@
         :data="blogListData"
         style="width: 100%">
       <el-table-column
-          prop="blogId"
+          prop="blogNo"
           label="文章编号"
           width="180">
       </el-table-column>
@@ -76,6 +76,8 @@ export default {
       }
       return moment(date).format("YYYY-MM-DD HH:mm")
     },
+
+    //博客信息列表
     selectAll() {
       request({
         url: '/api/blog/list?pageNum=1&pageSize=10'
@@ -92,19 +94,21 @@ export default {
       })
     },
     editBlog(index, row) {
-      let blogId = row.blogId
+      let blogNo = row.blogNo
       this.$router.push({
         path: "/blog-admin/manage-blog/manage-edit",
         query: {
-          blogId
+          blogNo
         }
       })
     },
+
+    //更新博客状态
     deleteBlog(index, row) {
       console.log("delete", index, row);
-      let blogId = row.blogId;
+      let blogNo = row.blogNo;
       request({
-        url: '/api/blog/update/status?blogId=' + blogId + '&status=-1',
+        url: '/api/blog/update/status?blogNo=' + blogNo + '&status=-1',
         method: 'get'
       }).then(res => {
         let resData = res.data;

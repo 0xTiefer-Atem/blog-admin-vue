@@ -50,13 +50,16 @@
         <el-button style="float: right; margin-right: 10px" type="text" @click="addBlog">保存</el-button>
       </el-col>
       <el-col>
-        <mavon-editor @save="addBlog"
-                      v-highlight
-                      codeStyle="atom-one-dark"
-                      :boxShadow="false"
-                      @change="contentChange"
-                      class="mk-editor"
-                      v-model="blogInfo.blogRawContent"/>
+        <mavon-editor
+            ref=md
+            @imgAdd="handleEditorImgAdd"
+            @imgDel="handleEditorImgDel"
+            @save="addBlog"
+            v-highlight
+            codeStyle="atom-one-dark"
+            :boxShadow="false"
+            class="mk-editor"
+            v-model="blogInfo.blogRawContent"/>
       </el-col>
     </el-row>
   </el-card>
@@ -82,12 +85,9 @@ export default {
 
       //markdown语法的值
       value: '',
-      //markdown渲染后的值
-      renderValue: '',
 
       //博客属性
       blogInfo: {
-        blogId: '',
         blogTitle: '',
         blogType: '',
         blogOverview: '',
@@ -104,11 +104,6 @@ export default {
     },
     handleClose(tag) {
       this.blogInfo.blogTagList.splice(this.blogInfo.blogTagList.indexOf(tag), 1);
-    },
-
-    contentChange(value, render) {
-      this.renderValue = render;
-      console.log(this.renderValue)
     },
 
     showInput() {
@@ -133,13 +128,11 @@ export default {
     //增加博客
     addBlog() {
       let blog = {};
-      blog.blogId = this.blogInfo.blogId
       blog.blogTagList = JSON.stringify(this.blogInfo.blogTagList);
       blog.blogTitle = this.blogInfo.blogTitle;
       blog.blogType = this.blogInfo.blogType;
       blog.blogRawContent = this.blogInfo.blogRawContent;
       blog.blogOverview = this.blogInfo.blogOverview
-      blog.blogContent = this.renderValue;
       let url = '/api/blog/add/blog'
       request({
         url: url,
@@ -149,8 +142,37 @@ export default {
         let resData = res.data;
         if (resData.status === 200) {
           this.$message.success("新增成功")
+          this.$router.push({
+            path: "/blog-admin/manage-blog/manage-list"
+          })
         }
       })
+    },
+
+    //上传图片
+    handleEditorImgAdd(pos, $file) {
+      let fileData = new FormData();
+      fileData.append('file', $file);
+      request({
+        url: '/api/blog/upload/img',
+        data: fileData,
+        method: 'post'
+      }).then(res => {
+        console.log(res)
+        let resData = res.data;
+        console.log(resData);
+        if (resData.status === 200) {
+          let imgUrl = resData.result.data.imgUrl
+          this.$refs.md.$imglst2Url([[pos, imgUrl]])
+        } else {
+          this.$message.error("图片上传失败")
+        }
+      })
+
+    },
+    //删除图片
+    handleEditorImgDel(pos) {
+      // delete this.imgFile[pos]
     }
   },
 }

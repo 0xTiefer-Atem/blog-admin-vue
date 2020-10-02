@@ -73,6 +73,9 @@
       </el-col>
       <el-col>
         <mavon-editor
+            ref=md
+            @imgAdd="handleEditorImgAdd"
+            @imgDel="handleEditorImgDel"
             :subfield="markDownEditable.subfield"
             :defaultOpen="'preview'"
             :toolbarsFlag="markDownEditable.toolbarsFlag"
@@ -99,9 +102,9 @@ import {request} from "@/network/request";
 export default {
   name: "EditBlog",
   activated() {
-    console.log(this.$route.query.blogId)
-    this.blogInfo.blogId = this.$route.query.blogId
-    this.selectBlogById(this.blogInfo.blogId)
+    console.log(this.$route.query.blogNo)
+    this.blogInfo.blogNo = this.$route.query.blogNo
+    this.selectBlogByBlogNo(this.blogInfo.blogNo)
   },
   data() {
     return {
@@ -123,12 +126,11 @@ export default {
 
       //博客属性
       blogInfo: {
-        blogId: '',
+        blogNo: '',
         blogTitle: '',
         blogType: '',
         blogOverview: '',
         blogRawContent: '',
-        blogContent: '',
         blogTagList: []
       }
     }
@@ -183,10 +185,10 @@ export default {
       this.inputValue = '';
     },
 
-    selectBlogById(id) {
-      let blogId = id
+    //一篇博客信息
+    selectBlogByBlogNo(blogNo) {
       request({
-        url: '/api/blog/query/one?blogId=' + blogId,
+        url: '/api/blog/query/one?blogNo=' + blogNo,
         method: 'get',
       }).then(res => {
         let resData = res.data;
@@ -201,13 +203,13 @@ export default {
     //更新博客
     updateBlog() {
       let blog = {};
-      blog.blogId = this.blogInfo.blogId
+      blog.blogCoverUrl = ''
+      blog.blogNo = this.blogInfo.blogNo
       blog.blogTagList = JSON.stringify(this.blogInfo.blogTagList);
       blog.blogTitle = this.blogInfo.blogTitle;
       blog.blogType = this.blogInfo.blogType;
       blog.blogRawContent = this.blogInfo.blogRawContent;
       blog.blogOverview = this.blogInfo.blogOverview
-      blog.blogContent = this.renderValue;
       let url = '/api/blog/update/content'
       request({
         url: url,
@@ -220,6 +222,32 @@ export default {
           this.$message.success("更新成功")
         }
       })
+    },
+
+    //上传图片
+    handleEditorImgAdd(pos, $file) {
+      let fileData = new FormData();
+      fileData.append('file', $file);
+      request({
+        url: '/api/blog/upload/img',
+        data: fileData,
+        method: 'post'
+      }).then(res => {
+        console.log(res)
+        let resData = res.data;
+        console.log(resData);
+        if (resData.status === 200) {
+          let imgUrl = resData.result.data.imgUrl
+          this.$refs.md.$imglst2Url([[pos, imgUrl]])
+        } else {
+          this.$message.error("图片上传失败")
+        }
+      })
+
+    },
+    //删除图片
+    handleEditorImgDel(pos) {
+      // delete this.imgFile[pos]
     }
   },
 }

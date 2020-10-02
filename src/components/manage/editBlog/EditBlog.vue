@@ -73,6 +73,9 @@
       </el-col>
       <el-col>
         <mavon-editor
+            ref=md
+            @imgAdd="handleEditorImgAdd"
+            @imgDel="handleEditorImgDel"
             @save="updateBlog"
             :subfield="markDownEditable.subfield"
             :defaultOpen="'preview'"
@@ -81,7 +84,6 @@
             v-highlight
             codeStyle="atom-one-dark"
             :boxShadow="false"
-            @change="contentChange"
             class="mk-editor"
             v-model="blogInfo.blogRawContent"/>
       </el-col>
@@ -100,9 +102,9 @@ import {request} from "@/network/request";
 export default {
   name: "EditBlog",
   activated() {
-    console.log(this.$route.query.blogId)
-    this.blogInfo.blogId = this.$route.query.blogId
-    this.selectBlogById(this.blogInfo.blogId)
+    console.log(this.$route.query.blogNo)
+    this.blogInfo.blogNo = this.$route.query.blogNo
+    this.selectBlogByBlogNo(this.blogInfo.blogNo)
   },
   data() {
     return {
@@ -119,17 +121,14 @@ export default {
         editable: false
       },
 
-      //markdown渲染后的值
-      renderValue: '',
 
       //博客属性
       blogInfo: {
-        blogId: '',
+        blogNo: '',
         blogTitle: '',
         blogType: '',
         blogOverview: '',
         blogRawContent: '',
-        blogContent: '',
         blogTagList: []
       }
     }
@@ -157,13 +156,9 @@ export default {
     goBack() {
       this.$router.back();
     },
+
     handleClose(tag) {
       this.blogInfo.blogTagList.splice(this.blogInfo.blogTagList.indexOf(tag), 1);
-    },
-
-    contentChange(value, render) {
-      this.renderValue = render;
-      console.log(this.renderValue)
     },
 
     showInput() {
@@ -184,10 +179,11 @@ export default {
       this.inputValue = '';
     },
 
-    selectBlogById(id) {
-      let blogId = id
+
+    //一篇博客信息
+    selectBlogByBlogNo(blogNo) {
       request({
-        url: '/api/blog/query/one?blogId=' + blogId,
+        url: '/api/blog/query/one?blogNo=' + blogNo,
         method: 'get',
       }).then(res => {
         let resData = res.data;
@@ -202,13 +198,13 @@ export default {
     //更新博客
     updateBlog() {
       let blog = {};
-      blog.blogId = this.blogInfo.blogId
+      blog.blogNo = this.blogInfo.blogNo
+      blog.blogCoverUrl = ''
       blog.blogTagList = JSON.stringify(this.blogInfo.blogTagList);
       blog.blogTitle = this.blogInfo.blogTitle;
       blog.blogType = this.blogInfo.blogType;
       blog.blogRawContent = this.blogInfo.blogRawContent;
       blog.blogOverview = this.blogInfo.blogOverview
-      blog.blogContent = this.renderValue;
       let url = '/api/blog/update/content'
       request({
         url: url,
@@ -222,7 +218,34 @@ export default {
           this.preview()
         }
       })
+    },
+
+    //上传图片
+    handleEditorImgAdd(pos, $file) {
+      let fileData = new FormData();
+      fileData.append('file', $file);
+      request({
+        url: '/api/blog/upload/img',
+        data: fileData,
+        method: 'post'
+      }).then(res => {
+        console.log(res)
+        let resData = res.data;
+        console.log(resData);
+        if (resData.status === 200) {
+          let imgUrl = resData.result.data.imgUrl
+          this.$refs.md.$imglst2Url([[pos, imgUrl]])
+        } else {
+          this.$message.error("图片上传失败")
+        }
+      })
+
+    },
+    //删除图片
+    handleEditorImgDel(pos) {
+      // delete this.imgFile[pos]
     }
+
   },
 }
 </script>
