@@ -220,6 +220,7 @@ export default {
         if (resData.status === 200) {
           console.log("操作成功");
           this.$message.success("更新成功")
+          this.preview()
         }
       })
     },
