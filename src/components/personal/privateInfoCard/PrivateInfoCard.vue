@@ -100,7 +100,7 @@ export default {
     },
     personalDetailClick(info) {
       let query = {}
-      query.blogId = info.blogId
+      query.blogNo = info.blogNo
       query.blogStatus = info.blogStatus
       this.$router.push({
         path: "/blog-admin/private-manage/private-edit",
