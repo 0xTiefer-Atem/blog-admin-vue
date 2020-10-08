@@ -14,13 +14,13 @@
 
         <!--        用户名-->
         <el-form-item prop="username">
-          <el-input placeholder="账号" v-model="loginForm.username" prefix-icon="el-icon-user-solid"></el-input>
+          <el-input placeholder="账号" v-model="loginForm.userAccount" prefix-icon="el-icon-user-solid"></el-input>
         </el-form-item>
 
 
         <!--        密码-->
         <el-form-item prop="password">
-          <el-input placeholder="密码" type="password" v-model="loginForm.password"
+          <el-input placeholder="密码" type="password" v-model="loginForm.userPwd"
                     prefix-icon="el-icon-s-promotion"></el-input>
         </el-form-item>
 
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import {request} from '../../network/request'
+import {request} from '@/network/request'
 
 export default {
   name: "Login.vue",
@@ -45,28 +45,47 @@ export default {
     return {
       //这是登录的数据绑定对象
       loginForm: {
-        username: '',
-        password: ''
+        userAccount: '',
+        userPwd: ''
       },
 
-      // loginFormRules: {
-      //   //登录框验证
-      //   username: [
-      //     { required: true, message: '请输用户名', trigger: 'blur' },
-      //     { min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }
-      //   ],
-      //   //密码框验证
-      //   password: [
-      //     {required: true, message: '请输入密码', trigger: 'blur'},
-      //     { min: 6, max: 15, message: '长度在 6 到 15 个字符', trigger: 'blur' }
-      //   ]
-      // }
+      loginFormRules: {
+        //登录框验证
+        username: [
+          {required: true, message: '请输用户名', trigger: 'blur'}
+        ],
+        //密码框验证
+        password: [
+          {required: true, message: '请输入密码', trigger: 'blur'}
+        ]
+      }
     }
   },
   methods: {
 
     login() {
-      this.$router.replace("/blog-admin")
+      let account = {}
+      account.userAccount = this.loginForm.userAccount;
+      account.userPwd = this.loginForm.userPwd;
+      request({
+        url: '/api/blog/login',
+        method: 'post',
+        data: account
+      }).then(res => {
+        let resData = res.data;
+        if (resData.status === 200) {
+          this.$message.success("登陆成功")
+          let userInfo = resData.result.data;
+          // console.log(userInfo)
+          this.$store.commit('updateUserInfo', {
+            userInfo
+          })
+          this.$router.replace("/blog-admin")
+
+        } else {
+          this.$message.error(resData.msg)
+        }
+      })
     },
 
 
