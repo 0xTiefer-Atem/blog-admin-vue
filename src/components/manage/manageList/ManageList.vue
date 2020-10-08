@@ -85,7 +85,7 @@ export default {
         let resData = res.data;
         if (resData.status === 200) {
           let blogListData = resData.result.data.list;
-          console.log(blogListData)
+          // console.log(blogListData)
           for (let i = 0; i < blogListData.length; i++) {
             blogListData[i].blogTagList = JSON.parse(blogListData[i].blogTagList);
           }
@@ -105,7 +105,7 @@ export default {
 
     //更新博客状态
     deleteBlog(index, row) {
-      console.log("delete", index, row);
+      // console.log("delete", index, row);
       let blogNo = row.blogNo;
       request({
         url: '/api/blog/update/status?blogNo=' + blogNo + '&status=-1',
