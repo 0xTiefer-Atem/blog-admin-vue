@@ -61,8 +61,9 @@
       </el-aside>
       <el-aside width="50%">
         <div style="margin-left: 20px">
-          <el-tooltip class="item" @click.native="uploadImgDialogVisible = true" effect="dark" content="点击更换封面" placement="right">
-            <el-image class="blog-cover-img" :src="blogInfo.blogCoverUrl" ></el-image>
+          <el-tooltip class="item" @click.native="uploadImgDialogVisible = true" effect="dark" content="点击更换封面"
+                      placement="right">
+            <el-image class="blog-cover-img" :src="blogInfo.blogCoverUrl"></el-image>
           </el-tooltip>
         </div>
       </el-aside>
@@ -140,7 +141,7 @@ import {request} from "@/network/request";
 export default {
   name: "EditBlog",
   activated() {
-    console.log(this.$route.query.blogNo)
+    // console.log(this.$route.query.blogNo)
     this.blogInfo.blogNo = this.$route.query.blogNo
     this.selectBlogByBlogNo(this.blogInfo.blogNo)
   },
@@ -228,7 +229,7 @@ export default {
         method: 'get',
       }).then(res => {
         let resData = res.data;
-        console.log(resData);
+        // console.log(resData);
         if (resData.status === 200) {
           this.blogInfo = resData.result.data
           this.blogInfo.blogTagList = JSON.parse(this.blogInfo.blogTagList)
@@ -246,7 +247,7 @@ export default {
       blog.blogType = this.blogInfo.blogType;
       blog.blogRawContent = this.blogInfo.blogRawContent;
       blog.blogOverview = this.blogInfo.blogOverview
-      console.log(blog)
+      // console.log(blog)
       let url = '/api/blog/update/content'
       request({
         url: url,
@@ -255,7 +256,7 @@ export default {
       }).then(res => {
         let resData = res.data;
         if (resData.status === 200) {
-          console.log("操作成功");
+          // console.log("操作成功");
           this.$message.success("更新成功")
           this.preview()
         }
@@ -271,9 +272,8 @@ export default {
         data: fileData,
         method: 'post'
       }).then(res => {
-        console.log(res)
         let resData = res.data;
-        console.log(resData);
+        // console.log(resData);
         if (resData.status === 200) {
           let imgUrl = resData.result.data.imgUrl
           this.$refs.md.$imglst2Url([[pos, imgUrl]])
@@ -296,7 +296,7 @@ export default {
     handleAvatarSuccess(res) {
       if (res.status === 200) {
         this.$message.success("封面上传成功")
-        console.log(res)
+        // console.log(res)
         let imgUrl = res.result.data.imgUrl
         this.blogInfo.blogCoverUrl = imgUrl
         this.uploadImgDialogVisible = false
@@ -333,12 +333,14 @@ export default {
   width: 400px;
   height: 266px;
 }
+
 .cover-img {
   margin-left: 45%;
   width: 178px;
   height: 178px;
   display: block;
 }
+
 .cover-uploader-icon {
   margin-left: 55%;
   border: 1px dashed #d9d9d9;
