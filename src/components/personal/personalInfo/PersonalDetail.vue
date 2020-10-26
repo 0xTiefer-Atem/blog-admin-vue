@@ -169,8 +169,9 @@ export default {
   methods: {
     //获取用户信息
     getUserInfo() {
+      let userNo = this.$store.getters.getUserNo
       request({
-        url: '/api/blog/select/user/info?userNo=001',
+        url: '/api/blog/select/user/info?userNo=' + userNo,
         method: 'get'
       }).then(res => {
         let resData = res.data;
@@ -180,7 +181,7 @@ export default {
           userInfo.userSkillInfoList = JSON.parse(userInfo.userSkillInfoList)
           userInfo.userEmail = '1144502582@qq.com'
           this.userInfo = userInfo
-          console.log(this.userInfo);
+          // console.log(this.userInfo);
           this.srcList.push(userInfo.userAvatar)
         } else {
           this.$message.error("个人信息失败")
@@ -190,7 +191,7 @@ export default {
 
     //上传头像成功后的回调函数
     handleAvatarSuccess(res, file) {
-      console.log(res)
+      // console.log(res)
       if (res.status === 200) {
         this.$message.success("头像上传成功")
         let avatarUrl = res.result.data.imgUrl
@@ -231,7 +232,7 @@ export default {
       postUserInfo.userNo = this.userInfo.userNo
       postUserInfo.userRelatedLinks = JSON.stringify(this.userInfo.userRelatedLinks)
       postUserInfo.userSkillInfoList = JSON.stringify(this.userInfo.userSkillInfoList)
-      console.log(postUserInfo)
+      // console.log(postUserInfo)
       request({
         url: '/api/blog/update/user/info',
         method: 'post',
@@ -240,6 +241,13 @@ export default {
         let resData = res.data;
         if (resData.status === 200) {
           this.$message.success("信息更新成功")
+          let userInfo = {}
+          userInfo.userAvatar = postUserInfo.userAvatar
+          userInfo.userName = postUserInfo.userName
+          userInfo.userNo = postUserInfo.userNo
+          this.$store.commit('updateUserInfo', {
+            userInfo
+          })
           this.getUserInfo()
         } else {
           this.$message.error("信息更新失败")
@@ -259,7 +267,7 @@ export default {
       this.skillPopoverVisible = false
       let skillItem = {}
       skillItem.skillName = this.skill.skillName
-      skillItem.skillPercentage = Number( this.skill.skillPercentage)
+      skillItem.skillPercentage = Number(this.skill.skillPercentage)
       this.userInfo.userSkillInfoList.push(skillItem)
       this.skill.skillName = ''
       this.skill.skillPercentage = 0
