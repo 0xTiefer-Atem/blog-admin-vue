@@ -85,7 +85,7 @@ export default {
       method: 'get'
     }).then(res => {
       let resData = res.data;
-      console.log(resData);
+      // console.log(resData);
       if (resData.status === 200) {
         this.personalInfoList = resData.result.data;
       } else {
