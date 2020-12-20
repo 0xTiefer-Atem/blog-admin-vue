@@ -202,9 +202,8 @@ export default {
         data: fileData,
         method: 'post'
       }).then(res => {
-        console.log(res)
         let resData = res.data;
-        console.log(resData);
+        // console.log(resData);
         if (resData.status === 200) {
           let imgUrl = resData.result.data.imgUrl
           this.$refs.md.$imglst2Url([[pos, imgUrl]])
@@ -228,7 +227,7 @@ export default {
     handleAvatarSuccess(res) {
       if (res.status === 200) {
         this.$message.success("封面上传成功")
-        console.log(res)
+        // console.log(res)
         let imgUrl = res.result.data.imgUrl
         this.blogInfo.blogCoverUrl = imgUrl
         this.uploadImgDialogVisible = false
