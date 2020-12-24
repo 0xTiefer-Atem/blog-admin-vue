@@ -3,8 +3,8 @@
     <!--    头部区域-->
     <el-header>
       <div>
-        <el-avatar class="logo-img" src="http://47.107.64.157/user/avatar/13db1601560435449.jpeg" alt=""/>
-        <span class="system_title">王骞-个人博客后台管理系统</span>
+        <el-avatar class="logo-img" :src="this.$store.getters.getUserAvatar"/>
+        <span class="system_title">{{ this.$store.getters.getUserName }}-个人博客后台管理系统</span>
       </div>
       <el-button type="text" @click="logOut">退出</el-button>
     </el-header>
@@ -12,7 +12,6 @@
     <el-container>
       <!--      侧边栏-->
       <el-aside width='200px'>
-        <!--        <div class="toggle-button">|||</div>-->
         <!--        侧边栏菜单区域-->
         <el-menu background-color="#333744"
                  text-color="#fff"
@@ -115,11 +114,6 @@ export default {
       this.$store.commit('logOutUser');
       this.$router.replace('/');
     },
-
-    //点击按钮切换菜单的折叠
-    toggleCollapse() {
-      this.isCollapse = !this.isCollapse;
-    },
     //保存链接的激活状态
     saveNavState(activePath) {
       // console.log(activePath);
@@ -137,16 +131,6 @@ export default {
   height: 100%;
 }
 
-.el-header {
-  background-color: #373D41;
-  display: flex;
-  justify-content: space-between;
-  padding-left: 0;
-  align-items: center;
-  color: #fff;
-  font-size: 20px;
-}
-
 .el-header div {
   display: flex;
   align-items: center;
@@ -157,29 +141,11 @@ export default {
 }
 
 .el-aside {
-  background-color: #333744;
-}
-
-.el-aside .el-menu {
   border-right: none;
-}
-
-.el-main {
-  background-color: #EAEDF1;
 }
 
 .logo-img {
   width: 50px;
   height: 50px;
-}
-
-.toggle-button {
-  background-color: #4a5060;
-  font-size: 15px;
-  line-height: 24px;
-  color: #fff;
-  text-align: center;
-  letter-spacing: 0.2em;
-  cursor: pointer;
 }
 </style>
