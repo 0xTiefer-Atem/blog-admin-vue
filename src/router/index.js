@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '../store/index';
 
 const Login = () => import('../components/login/Login');
 const Home = () => import('../components/Home');
@@ -90,5 +91,20 @@ const router = new VueRouter({
     mode: 'history'
 });
 
+//路由守卫
+router.beforeEach((to, from, next) => {
+    let isLogin = store.state.userInfo.isLogin;
+    let to_path = to.path
+    if (to_path !== '/blog-admin/blog-login') {
+        if (isLogin) {
+            next();
+        } else {
+            next({
+                path: '/blog-admin/blog-login'
+            })
+        }
+    }
+    next()
 
+})
 export default router
