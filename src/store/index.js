@@ -11,9 +11,11 @@ Vue.use(Vuex);
 //里面放入的对象参数
 //存放一些变量的值
 const state = {
-    blog: {
-        blogId: '',
-        blogStatus: '',
+    userInfo: {
+        userNo: '',
+        userAvatar: '',
+        userName: '',
+        isLogin: false
     }
 };
 //3. 创建Vuex对象
@@ -23,8 +25,14 @@ const store = new Vuex.Store({
     //定义一些对state里面变量的方法函数
     mutations,
     getters: {
-        getBlogInfo() {
-            return state.blog;
+        getUserAvatar() {
+            return state.userInfo.userAvatar;
+        },
+        getUserName() {
+            return state.userInfo.userName;
+        },
+        getUserNo() {
+            return state.userInfo.userNo;
         }
     }
 });
