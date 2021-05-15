@@ -7,67 +7,73 @@
         </el-col>
       </el-row>
     </div>
+
+
     <!--标题封面部分-->
-    <el-container>
-      <el-aside width="40%">
-        <div style="margin-left: 20px">
-          <div>
-            标题:
-            <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogTitle"
-                      style="width: 300px;margin: 15px;"></el-input>
-          </div>
-          <div>
-            分类:
-            <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogType"
-                      style="width: 300px;margin: 15px"></el-input>
-          </div>
-          <div>
-            标签:
-            <el-tag
-                :closable="markDownEditable.isEditable"
-                :key="index"
-                v-for="(tag,index) in blogInfo.blogTagList"
-                style=" margin: 15px"
-                :disable-transitions="false"
-                @close="handleClose(tag)">
-              {{ tag.name }}
-            </el-tag>
-            <el-input
-                :disabled="!markDownEditable.isEditable"
-                style="width: 100px;margin: 15px"
-                class="input-new-tag"
-                v-if="inputVisible"
-                v-model="inputValue"
-                ref="saveTagInput"
-                @keyup.enter.native="handleInputConfirm"
-                @blur="handleInputConfirm">
-            </el-input>
-            <el-button
-                :disabled="!markDownEditable.isEditable"
-                v-else style="margin: 15px"
-                class="button-new-tag"
-                @click="showInput">+
-            </el-button>
-          </div>
-          <div>
-            概要:
-            <el-input
-                :disabled="!markDownEditable.isEditable"
-                v-model="blogInfo.blogOverview"
-                style="width: 300px;margin: 15px">
-            </el-input>
-          </div>
-        </div>
-      </el-aside>
-      <el-aside width="50%">
-        <div style="margin-left: 20px">
-          <el-tooltip class="item" @click.native="uploadImgDialogVisible = true" effect="dark" content="点击更换封面"
-                      placement="right">
-            <el-image class="blog-cover-img" :src="blogInfo.blogCoverUrl"></el-image>
-          </el-tooltip>
-        </div>
-      </el-aside>
-    </el-container>
+    <el-collapse v-model="activeName" style="width: 100%">
+      <el-collapse-item title="博客基本信息" name="1">
+        <el-container>
+          <el-aside width="40%">
+            <div style="margin-left: 20px">
+              <div>
+                标题:
+                <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogTitle"
+                          style="width: 300px;margin: 15px;"></el-input>
+              </div>
+              <div>
+                分类:
+                <el-input :disabled="!markDownEditable.isEditable" v-model="blogInfo.blogType"
+                          style="width: 300px;margin: 15px"></el-input>
+              </div>
+              <div>
+                标签:
+                <el-tag
+                    :closable="markDownEditable.isEditable"
+                    :key="index"
+                    v-for="(tag,index) in blogInfo.blogTagList"
+                    style=" margin: 15px"
+                    :disable-transitions="false"
+                    @close="handleClose(tag)">
+                  {{ tag.name }}
+                </el-tag>
+                <el-input
+                    :disabled="!markDownEditable.isEditable"
+                    style="width: 100px;margin: 15px"
+                    class="input-new-tag"
+                    v-if="inputVisible"
+                    v-model="inputValue"
+                    ref="saveTagInput"
+                    @keyup.enter.native="handleInputConfirm"
+                    @blur="handleInputConfirm">
+                </el-input>
+                <el-button
+                    :disabled="!markDownEditable.isEditable"
+                    v-else style="margin: 15px"
+                    class="button-new-tag"
+                    @click="showInput">+
+                </el-button>
+              </div>
+              <div>
+                概要:
+                <el-input
+                    :disabled="!markDownEditable.isEditable"
+                    v-model="blogInfo.blogOverview"
+                    style="width: 300px;margin: 15px">
+                </el-input>
+              </div>
+            </div>
+          </el-aside>
+          <el-aside width="50%">
+            <div style="margin-left: 20px">
+              <el-tooltip class="item" @click.native="uploadImgDialogVisible = true" effect="dark" content="点击更换封面"
+                          placement="right">
+                <el-image class="blog-cover-img" :src="blogInfo.blogCoverUrl"></el-image>
+              </el-tooltip>
+            </div>
+          </el-aside>
+        </el-container>
+      </el-collapse-item>
+    </el-collapse>
 
 
     <el-row>
@@ -91,6 +97,7 @@
         </el-button>
       </el-col>
       <el-col>
+        <el-divider content-position="left">博客内容</el-divider>
         <mavon-editor
             ref=md
             @imgAdd="handleEditorImgAdd"
@@ -173,7 +180,9 @@ export default {
         blogOverview: '',
         blogRawContent: '',
         blogTagList: []
-      }
+      },
+
+      activeName: '1',
     }
   },
   methods: {
