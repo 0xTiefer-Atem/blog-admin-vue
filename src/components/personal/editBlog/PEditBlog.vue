@@ -102,7 +102,7 @@ import {request} from "@/network/request";
 export default {
   name: "EditBlog",
   activated() {
-    console.log(this.$route.query.blogNo)
+    // console.log(this.$route.query.blogNo)
     this.blogInfo.blogNo = this.$route.query.blogNo
     this.selectBlogByBlogNo(this.blogInfo.blogNo)
   },
